@@ -13,24 +13,6 @@ use classes\view;
  */
 class Regist
 {
-
-    public function __construct()
-    {
-        $this->init();
-    }
-
-    /**
-     * 外部ファイル読み込み
-     */
-    private function init()
-    {
-//        include_once(dirname(__FILE__) . '/../../config/base.php');
-//        include_once(ROOT_DIR_PATH . 'model/human/regist.php');
-//        include_once(ROOT_DIR_PATH . 'classes/view.php');
-//        include_once(ROOT_DIR_PATH . 'classes/db.php');
-//        include_once(ROOT_DIR_PATH . 'classes/util.php');
-    }
-
     /**
      * 処理実行
      */

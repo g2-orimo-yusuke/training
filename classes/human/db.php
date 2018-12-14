@@ -5,8 +5,6 @@ namespace classes;
 use Exception;
 use mysqli;
 
-//include_once(dirname(__FILE__) . '/../config/base.php');
-
 /**
  * DB操作に関する処理を記述するクラス
  */

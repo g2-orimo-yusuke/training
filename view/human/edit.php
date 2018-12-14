@@ -1,14 +1,13 @@
 <?php
-//include_once(dirname(__FILE__) . '/../../model/human/edit.php');
-?><!DOCTYPEE HTML>
+?><!DOCTYPE HTML>
 <html>
 <head>
     <meta charset="utf-8">
-    <title><?= $arrView['editHuman'] ?></title>
+    <title><?= $editViewName ?></title>
 </head>
 <body>
 <div><?= $message ?></div>
-<p><?= $arrView['editHuman'] ?></p>
+<p><?= $editViewName ?></p>
 <form method="POST">
     <div>
         <input type="text" name="id" value="<?= $result['id'] ?>" readonly/>
@@ -28,6 +27,6 @@
         <input type="submit" name="delete" value="削除"/>
     </div>
 </form>
-<a href="table.php"><?= $arrView['humanList'] ?>へ戻る</a>
+<a href="table.php"><?= $tableViewName ?>へ戻る</a>
 </body>
 </html>

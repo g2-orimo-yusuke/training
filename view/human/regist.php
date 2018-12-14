@@ -1,5 +1,4 @@
 <?php
-// include_once(dirname ( __FILE__ ).'/../../controller/human/regist.php');
 ?><!DOCTYPE HTML>
 <html>
 <head>

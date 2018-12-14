@@ -4,9 +4,6 @@ namespace classes;
 
 use config\Human;
 
-//include_once(dirname(__FILE__) . '/../config/base.php');
-//include_once(ROOT_DIR_PATH . 'config/human.php');
-
 /**
  * Viewに関するメソッドを記述するクラス
  *

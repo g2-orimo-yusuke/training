@@ -14,23 +14,6 @@ use classes\view;
  */
 class table
 {
-    public function __construct()
-    {
-        $this->init();
-    }
-
-    /**
-     * 外部ファイル読み込み
-     */
-    private function init()
-    {
-//        include_once(dirname(__FILE__) . '/../../config/base.php');
-//        include_once(ROOT_DIR_PATH . 'config/human.php');
-//        include_once(ROOT_DIR_PATH . 'model/human/table.php');
-//        include_once(ROOT_DIR_PATH . 'classes/util.php');
-//        include_once(ROOT_DIR_PATH . 'classes/view.php');
-    }
-
     /**
      * 処理実行
      */
@@ -38,7 +21,7 @@ class table
     {
         // 人情報編集の結果メッセージを設定
         $message = util::getSessionMessage();
-        $tableModel = new table();
+        $tableModel = new \model\table();
         $result = null;
 
         try {

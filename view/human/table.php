@@ -1,5 +1,4 @@
 <?php
-//include_once(dirname(__FILE__) . '/../../model/human/table.php');
 ?><!DOCTYPE HTML>
 <html>
 <head>

@@ -9,18 +9,6 @@ use mysqli_result;
  */
 class view
 {
-
-    public function __construct()
-    {
-        $this->init();
-    }
-
-    private function init()
-    {
-//        include_once(dirname(__FILE__) . '/../config/base.php');
-//        include_once(ROOT_DIR_PATH . 'classes/config.php');
-    }
-
     /**
      * PHPファイルを外部読み込みし、人情報登録の画面表示用文字列を返却する。
      *
@@ -58,8 +46,22 @@ class view
         return $contents;
     }
 
+    public function outPutViewEdit(array $result, string $message) {
+
+        // 画面に表示する画面名を取得
+        $editViewName = config::getViewName('editHuman');
+        $tableViewName = config::getViewName('humanTable');
+
+        ob_start();
+        include(ROOT_DIR_PATH . 'view/human/edit.php');
+        $contents = ob_get_contents();
+        ob_end_clean();
+
+        return $contents;
+    }
+
     /**
-     * 人一覧のヘッター部分を出力する。
+     * 連想配列のvalueを一覧のヘッターとして出力する。
      *
      * @param array $arrColumn
      */
@@ -71,7 +73,8 @@ class view
     }
 
     /**
-     * 引数のDB取得結果を基に人一覧を画面に出力する。
+     * DBの取得結果と連想配列を基に一覧を画面に出力する。
+     * DBの取得結果のカラム名と連想配列の要素名は一致している必要がある。
      *
      * @param mysqli_result $result
      * @param               $arrColumn
@@ -83,7 +86,7 @@ class view
             echo '<tr>';
             foreach ($arrColumn as $k => $val) {
                 if ($k == 'id') {
-                    echo '<td><a href="edit.php?id=' . $row[$k] . '">' . $row[$k] . '</a></td>';
+                    echo '<td><a href="/controller/human/edit.php?id=' . $row[$k] . '">' . $row[$k] . '</a></td>';
                 } else {
                     echo '<td>' . $row[$k] . '</td>';
                 }

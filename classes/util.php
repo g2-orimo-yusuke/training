@@ -1,10 +1,9 @@
 <?php
+
 namespace classes;
 
-// 定数ファイル読み込み
-// include_once(dirname(__FILE__) . '/../config/base.php');
-
-function test () {
+function test()
+{
 
 }
 
@@ -45,7 +44,13 @@ class util
      */
     static function getParam(string $name)
     {
-        return $_POST[$name] ?? null;
+        if (isset($_POST[$name])) {
+            return $_POST[$name];
+        }
+        if (isset($_GET[$name])) {
+            return $_GET[$name];
+        }
+        return null;
     }
 
     /**
