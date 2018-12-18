@@ -2,11 +2,6 @@
 
 namespace classes;
 
-function test()
-{
-
-}
-
 /**
  * Utilクラス
  *
@@ -20,9 +15,8 @@ class util
      *
      * @return string
      */
-    static function getSessionMessage()
+    static function getViewMessage()
     {
-        // 人情報編集の結果メッセージを設定
         if (!isset($_SESSION)) {
             session_start();
         }
@@ -33,6 +27,19 @@ class util
         }
 
         return '';
+    }
+
+    /**
+     * セッションにメッセージを登録する。
+     *
+     * @param String $message
+     */
+    static function setViewMessage(String $message)
+    {
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+        $_SESSION['message'] = $message;
     }
 
     /**

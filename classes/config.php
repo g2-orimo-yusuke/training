@@ -5,14 +5,16 @@ namespace classes;
 use config\Base;
 
 /**
- * Viewに関するメソッドを記述するクラス
+ * configに関するメソッドを記述するクラス
  *
- * Class output
+ * Class config
  * @package classes
  */
 class config
 {
     /**
+     * ホストURLを取得する。
+     *
      * @return String
      */
     public static function getHostUrl()
@@ -31,7 +33,7 @@ class config
      */
     public static function getViewName(String $funcName, String $viewNameElements)
     {
-        return \config\output::$arrViewName[$funcName][$viewNameElements] ?? null;
+        return \config\view::$arrViewName[$funcName][$viewNameElements] ?? null;
     }
 
     /**
@@ -44,7 +46,7 @@ class config
      */
     public static function getMessage($viewMessageElements)
     {
-        return \config\output::$arrMsg[$viewMessageElements] ?? null;
+        return \config\view::$arrMsg[$viewMessageElements] ?? null;
     }
 
     /**
@@ -56,7 +58,7 @@ class config
      */
     public static function getColumnArr(String $funcName)
     {
-        return \config\output::$arrColumn[$funcName];
+        return \config\view::$arrColumn[$funcName];
     }
 
 }

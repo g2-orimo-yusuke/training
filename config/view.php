@@ -3,12 +3,12 @@
 namespace config;
 
 /**
- * configクラス
+ * outputクラス
  *
- * Class config
+ * Class output
  * @package config
  */
-class config
+class output
 {
     /* 表のカラム部の定義 */
     static $arrColumn = [

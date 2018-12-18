@@ -2,6 +2,7 @@
 
 namespace classes;
 
+use config\Base;
 use Exception;
 use mysqli;
 
@@ -10,7 +11,6 @@ use mysqli;
  */
 class db
 {
-
     /**
      * 渡された要素名を基にDB接続のための情報を返却する。
      *
@@ -20,9 +20,8 @@ class db
      */
     public static function getInfo($infoElements)
     {
-        return \config\Base::$arrDb[$infoElements] ?? null;
+        return Base::$arrDb[$infoElements] ?? null;
     }
-
 
     /**
      * @return mysqli DB接続オブジェクト
@@ -41,7 +40,6 @@ class db
         }
         return $mysqli;
     }
-
 
     /**
      * 人一覧情報をDBから取得し返却する。
@@ -91,7 +89,6 @@ class db
      */
     function getHumanInfo(mysqli $mysqli, int $id)
     {
-
         $query = 'SELECT id, name, age, email FROM human WHERE id=?';
         try {
             $stmt = $mysqli->prepare($query);

@@ -10,50 +10,16 @@ use mysqli_result;
 class view
 {
     /**
-     * PHPファイルを外部読み込みし、人情報登録の画面表示用文字列を返却する。
+     * 渡されたBeanの情報を基にviewをechoで出力できる状態に成形する。
      *
-     * @param  String $message
+     * @param viewOutput $bean
      *
-     * @return String
+     * @return false|string
      */
-    public function outPutViewRegist($message)
+    public function outPutView(viewOutput $bean)
     {
-        //　画面に表示する画面名を取得
-        $registViewName = config::getViewName('registHuman');
-        $tableViewName = config::getViewName('humanTable');
-
         ob_start();
-        include(ROOT_DIR_PATH . 'view/human/regist.php');
-        $contents = ob_get_contents();
-        ob_end_clean();
-
-        return $contents;
-    }
-
-
-    public function outPutViewTable(\mysqli_result $result, string $message)
-    {
-        // 画面に表示する画面名を取得
-        $registViewName = config::getViewName('registHuman');
-        $tableViewName = config::getViewName('humanTable');
-        $arrColumn = config::getColumnArr();
-
-        ob_start();
-        include(ROOT_DIR_PATH . 'view/human/table.php');
-        $contents = ob_get_contents();
-        ob_end_clean();
-
-        return $contents;
-    }
-
-    public function outPutViewEdit(array $result, string $message) {
-
-        // 画面に表示する画面名を取得
-        $editViewName = config::getViewName('editHuman');
-        $tableViewName = config::getViewName('humanTable');
-
-        ob_start();
-        include(ROOT_DIR_PATH . 'view/human/edit.php');
+        include(ROOT_PATH . $bean->getViewPath());
         $contents = ob_get_contents();
         ob_end_clean();
 
@@ -65,7 +31,7 @@ class view
      *
      * @param array $arrColumn
      */
-    public function printHumanTableHeader(array $arrColumn)
+    public function printTableHeader(array $arrColumn)
     {
         foreach ($arrColumn as $v) {
             echo '<th>' . $v . '</th>';
@@ -77,14 +43,15 @@ class view
      * DBの取得結果のカラム名と連想配列の要素名は一致している必要がある。
      *
      * @param mysqli_result $result
-     * @param               $arrColumn
+     * @param array         $arrColumn
      */
-    public function printHumanTable(mysqli_result $result, $arrColumn)
+    public function printHumanTable(mysqli_result $result, array $arrColumn)
     {
         for ($i = 0; $i < $result->num_rows; $i++) {
             $row = $result->fetch_assoc();
             echo '<tr>';
             foreach ($arrColumn as $k => $val) {
+                // key名が'id'の場合のみ人編集画面へのリンクを付与する。
                 if ($k == 'id') {
                     echo '<td><a href="/controller/human/edit.php?id=' . $row[$k] . '">' . $row[$k] . '</a></td>';
                 } else {
