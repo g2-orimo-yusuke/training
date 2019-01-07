@@ -1,30 +1,28 @@
 <?php
 
-namespace classes;
+namespace classes\cache;
 
-use Memcached;
-use Redis;
+use config\cache;
 
 /**
  * cacheクラス
  *
- * Class cache
+ * Class base
  * @package classes
  */
-class cache
+class base
 {
-    private const PORT = 11211;
-    private $mem;
-
-    private $red;
+    private $instance;
 
     public function __construct()
     {
-//        $this->mem = new Memcached();
-//        $this->mem->addServer(LOCAL_HOST, self::PORT);
-
-        $this->red = new Redis();
-        $this->red->connect(LOCAL_HOST, 6379);
+        switch (cache::USE_CACHE) {
+            case cache::CACHE_NAME_REDIS :
+                $this->instance = new \classes\cache\redis();
+                break;
+            case cache::CACHE_NAME_MEMCACHED :
+                $this->instance = new \classes\cache\memcached();
+        }
     }
 
     /**
@@ -35,8 +33,7 @@ class cache
      */
     public function add(string $key, $value)
     {
-//        $this->mem->add($key, $value);
-        $this->red->set($key, $value);
+        $this->instance->add($key, $value);
     }
 
     /**
@@ -48,8 +45,7 @@ class cache
      */
     public function get(string $key)
     {
-//        return $this->mem->get($key) ?? null;
-        return $this->red->get($key);
+        return $this->instance->get($key);
     }
 
     /**
@@ -59,8 +55,7 @@ class cache
      */
     public function delete(string $key)
     {
-//        $this->mem->delete($key);
-        $this->red->delete($key);
+        $this->instance->delete($key);
     }
 
     /**
@@ -68,8 +63,7 @@ class cache
      */
     public function quit()
     {
-//        $this->mem->quit();
-        $this->red->close();
+        $this->instance->quit();
     }
 
 }
