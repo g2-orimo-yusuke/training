@@ -1,35 +1,39 @@
 <?php
 
-namespace controller;
+namespace controller\human;
 
-use classes\util;
-use classes\view;
+use classes\exception\appException;
+use classes\Param;
+use classes\View;
+use Exception;
 
 /**
  * 人情報登録機能のControllerクラス
  *
- * Class Regist
- * @package controller
+ * Class regist
+ * @package controller\human
  */
 class Regist
 {
     /**
      * 処理実行
+     *
+     * @throws Exception
      */
-    public function action()
+    public function action(): void
     {
-        if (util::isExistsInputParam('regist')) {
+        $registModel = new \model\human\Regist();
 
-            $registModel = new \model\Regist();
-            $registModel->registHuman();
+        if (Param::isExistsInputParam('regist')) {
+            try {
+                $registModel->regist();
+            } catch (appException $e) {
+                $e->putLog();
+            }
         }
-        $message = util::getSessionMessage();
+        $bean = $registModel->createViewBean();
+        $viewOutPut = new View();
 
-        $viewOutPut = new view();
-        echo $viewOutPut->outPutViewRegist($message);
+        echo $viewOutPut->outPutView($bean);
     }
 }
-
-// このクラスを処理開始の起点とするため自身の呼び出し処理を書く
-$registController = new Regist();
-$registController->action();

@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orimo.yusuke
- * Date: 2018-12-17
- * Time: 18:23
- */
 
-namespace classes;
+namespace classes\beans;
 
 /**
  * view表示用のデータを格納するBeanクラス
@@ -14,7 +8,7 @@ namespace classes;
  * Class viewOutput
  * @package classes
  */
-class viewOutput
+class ViewOutput
 {
     /* 画面名 */
     private $viewName = '';
@@ -30,6 +24,8 @@ class viewOutput
     private $viewPath = '';
 
     /**
+     * view名を返却する。
+     *
      * @return string
      */
     public function getViewName(): string
@@ -38,6 +34,8 @@ class viewOutput
     }
 
     /**
+     * view名をセットする。
+     *
      * @param string $viewName
      */
     public function setViewName(string $viewName): void
@@ -46,6 +44,8 @@ class viewOutput
     }
 
     /**
+     * 遷移先のview名を返却する。
+     *
      * @return array
      */
     public function getNextViewName(): array
@@ -54,6 +54,8 @@ class viewOutput
     }
 
     /**
+     * 遷移先のview名をセットする。
+     *
      * @param array $nextViewName
      */
     public function setNextViewName(array $nextViewName): void
@@ -62,6 +64,8 @@ class viewOutput
     }
 
     /**
+     * メッセージを返却する。
+     *
      * @return array
      */
     public function getMessage(): array
@@ -70,6 +74,8 @@ class viewOutput
     }
 
     /**
+     * メッセージをセットする。
+     *
      * @param array $message
      */
     public function setMessage(array $message): void
@@ -78,6 +84,8 @@ class viewOutput
     }
 
     /**
+     * 画面表示に使用する配列を返却する。
+     *
      * @return array
      */
     public function getOutputArray(): array
@@ -86,6 +94,8 @@ class viewOutput
     }
 
     /**
+     * 画面表示に使用する配列をセットする。
+     *
      * @param array $outputArray
      */
     public function setOutputArray(array $outputArray): void
@@ -94,6 +104,8 @@ class viewOutput
     }
 
     /**
+     * DB取得結果を返却する。
+     *
      * @return mixed
      */
     public function getResult()
@@ -102,6 +114,8 @@ class viewOutput
     }
 
     /**
+     * DB取得結果をセットする。
+     *
      * @param $result
      */
     public function setResult($result): void
@@ -110,6 +124,8 @@ class viewOutput
     }
 
     /**
+     * 表示するviewのパスを返却する。
+     *
      * @return string
      */
     public function getViewPath(): string
@@ -118,6 +134,8 @@ class viewOutput
     }
 
     /**
+     * 表示するviewのパスをセットする。
+     *
      * @param string $viewPath
      */
     public function setViewPath(string $viewPath): void

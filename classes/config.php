@@ -3,6 +3,9 @@
 namespace classes;
 
 use config\Base;
+use config\Cache;
+use config\Exception;
+use config\View;
 
 /**
  * configに関するメソッドを記述するクラス
@@ -10,12 +13,13 @@ use config\Base;
  * Class config
  * @package classes
  */
-class config
+class Config
 {
     /**
      * ホストURLを取得する。
+     * 取得できない場合nullを返却する。
      *
-     * @return String
+     * @return string|null
      */
     public static function getHostUrl()
     {
@@ -26,39 +30,64 @@ class config
      * 渡された機能名・要素名に対応する画面名を返却する。
      * 渡された機能名・要素名に対応する画面名が存在しない場合はnullを返却する。
      *
-     * @param  String $funcName
-     * @param  String $viewNameElements
+     * @param string $funcName
+     * @param string $viewNameElements
      *
-     * @return String
+     * @return string|null
      */
-    public static function getViewName(String $funcName, String $viewNameElements)
+    public static function getViewName(string $funcName, string $viewNameElements)
     {
-        return \config\view::$arrViewName[$funcName][$viewNameElements] ?? null;
+        return View::$arrViewName[$funcName][$viewNameElements] ?? null;
     }
 
     /**
      * 渡された要素名に対応するメッセージを返却する。
      * 渡された要素名に対応するメッセージが存在しない場合はnullを返却する。
      *
-     * @param  String
+     * @param string $viewMessageElements
      *
-     * @return String
+     * @return string|null
      */
-    public static function getMessage($viewMessageElements)
+    public static function getMessage(string $viewMessageElements)
     {
-        return \config\view::$arrMsg[$viewMessageElements] ?? null;
+        return View::$arrMsg[$viewMessageElements] ?? null;
     }
 
     /**
      * 渡された要素名に対応する一覧のヘッター部を連想配列で取得する。
      *
-     * @param String $funcName
+     * @param string $funcName
      *
      * @return array
      */
-    public static function getColumnArr(String $funcName)
+    public static function getColumnArr(string $funcName): array
     {
-        return \config\view::$arrColumn[$funcName];
+        return View::$arrColumn[$funcName];
+    }
+
+    /**
+     * 渡された要素名に対応する例外時メッセージを返却する。
+     * 渡された要素名に対応する例外時メッセージが存在しない場合はnullを返却する。
+     *
+     * @param $exceptionMessageElements
+     *
+     * @return string|null
+     */
+    public static function getExceptionMessage($exceptionMessageElements)
+    {
+        return Exception::$arrMsg[$exceptionMessageElements] ?? null;
+    }
+
+    /**
+     * 渡された要素名に対応するインメモリDBの接続情報を返却する。
+     * 渡された要素名に対応するインメモリDBの接続情報が存在しない場合はnullを返却する。
+     *
+     * @param string $infoElements
+     *
+     * @return string|null
+     */
+    public static function getCacheConnectInfo(string $infoElements) {
+        return Cache::$arrConnectInfo[Cache::USE_CACHE][$infoElements] ?? null;
     }
 
 }

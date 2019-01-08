@@ -1,69 +1,109 @@
 <?php
 
-namespace model;
+namespace model\human;
 
-use classes\db;
-use classes\util;
-use controller\table;
+use classes\Config;
+use classes\db\Human;
+use classes\exception\appException;
+use classes\Param;
+use classes\beans\ViewOutput;
 use Exception;
 
-class edit
+/**
+ * 人情報編集機能のModelクラス
+ *
+ * Class edit
+ * @package model\human
+ */
+class Edit
 {
-    function logic()
+    /**
+     * 人情報一覧画面で選択した人情報を取得する。
+     *
+     * @return array
+     * @throws appException
+     * @throws Exception
+     */
+    public function getInfo(): array
     {
-        // 登録結果メッセージ変数
         try {
-            $db = new db();
+            $db = new Human();
             $mysqli = $db->dbConnect();
-            return $db->getHumanInfo($mysqli, util::getParam('id'));
-        } catch (Exception $e) {
-            $message = \classes\config::getViewMessage('error');
-            $this->loadTable();
+            return $db->getInfoById($mysqli, Param::getParam('id'));
+        } catch (appException $e) {
+            Param::setViewMessage(Config::getMessage('error'));
+            throw $e;
         }
     }
 
-// 変更が押下された場合に実行。画面から入力された情報を基にDBの人情報を更新する。
-    function changeHuman(int $id)
+    /**
+     * 人情報編集画面にて入力された情報を基にDBの対象idの人情報を変更する。
+     *
+     * @param int $id
+     *
+     * @throws Exception
+     */
+    public function change(int $id): void
     {
         try {
-            $db = new db();
+            $db = new Human();
             $mysqli = $db->dbConnect();
-            $db->changeHuman($mysqli, $id, util::getParam('name'), util::getParam('age'),
-                util::getParam('email'));
+            $db->change($mysqli, $id, Param::getParam('name'), Param::getParam('age'),
+                Param::getParam('email'));
 
-            session_start();
-            $_SESSION['message'] = sprintf(\classes\config::getViewMessage('change'), $id);
-            $this->loadTable();
+
+            Param::setViewMessage(sprintf(Config::getMessage('change'), $id));
 
         } catch
-        (Exception $e) {
-            $message = \classes\config::getViewMessage('error');
-            $this->loadTable();
+        (appException $e) {
+            Param::setViewMessage(Config::getMessage('error'));
+            throw $e;
         }
-
     }
 
-// 削除が押下された場合に実行。対象idの人情報をDBから削除する。
-    function deleteHuman(int $id)
+    /**
+     * 対象idの人情報をDBから削除する。
+     *
+     * @param int $id
+     *
+     * @throws Exception
+     */
+    public function delete(int $id): void
     {
         try {
-            $db = new db();
+            $db = new Human();
             $mysqli = $db->dbConnect();
-            $db->deleteHuman($mysqli, $id);
+            $db->delete($mysqli, $id);
 
-            session_start();
-            $_SESSION['message'] = sprintf(\classes\config::getViewMessage('delete'), $id);
-            $this->loadTable();
+            Param::setViewMessage(sprintf(Config::getMessage('delete'), $id));
 
         } catch (Exception $e) {
-            $message = \classes\config::getViewMessage('error');
-            $this->loadTable();
+            Param::setViewMessage(Config::getMessage('error'));
+            throw $e;
         }
-
     }
 
-    private function loadTable() {
-        header('Location: http://localhost:8888/controller/human/table.php');
-}
+    /**
+     * 画面表示用のBeanを生成する。
+     *
+     * @param array $result
+     *
+     * @return ViewOutput
+     */
+    public function createViewBean(array $result): ViewOutput
+    {
+        $bean = new ViewOutput();
+        $bean->setViewName(Config::getViewName('human', 'edit'));
+
+        $nextViewNameArray = ['nextViewName' => Config::getViewName('human', 'table')];
+        $bean->setNextViewName($nextViewNameArray);
+
+        $messageArray = ['message' => Param::getViewMessage()];
+        $bean->setMessage($messageArray);
+
+        $bean->setResult($result);
+        $bean->setViewPath('view/human/edit.php');
+        return $bean;
+    }
 
 }

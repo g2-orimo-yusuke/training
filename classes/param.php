@@ -2,44 +2,46 @@
 
 namespace classes;
 
+use classes\cache\InMemoryDB;
+
 /**
- * Utilクラス
+ * parameter操作に関する処理を記述するクラス
  *
- * Class util
+ * Class param
  */
-class util
+class Param
 {
     /**
-     * セッションに登録されているメッセージを取り出し返却する。
-     * セッションに登録されたメッセージを削除する。
+     * cacheに登録されているメッセージを取り出し返却する。
+     * cacheに登録されたメッセージを削除する。
      *
      * @return string
      */
-    static function getViewMessage()
+    public static function getViewMessage() :string
     {
-        if (!isset($_SESSION)) {
-            session_start();
-        }
-        if (isset($_SESSION['message'])) {
-            $message = $_SESSION['message'];
-            unset($_SESSION['message']);
+        $cache = new InMemoryDB();
+
+        if ($cache->get('message')) {
+            $message = $cache->get('message');
+            $cache->delete('message');
             return $message;
         }
+
+        $cache->quit();
 
         return '';
     }
 
     /**
-     * セッションにメッセージを登録する。
+     * cacheにメッセージを登録する。
      *
      * @param String $message
      */
-    static function setViewMessage(String $message)
+    public static function setViewMessage(string $message) :void
     {
-        if (!isset($_SESSION)) {
-            session_start();
-        }
-        $_SESSION['message'] = $message;
+        $cache = new InMemoryDB();
+        $cache->add('message', $message);
+        $cache->quit();
     }
 
     /**
@@ -47,9 +49,9 @@ class util
      *
      * @param string $name 取得したいリクエスト名
      *
-     * @return null
+     * @return string
      */
-    static function getParam(string $name)
+    public static function getParam(string $name) :string
     {
         if (isset($_POST[$name])) {
             return $_POST[$name];
@@ -67,8 +69,9 @@ class util
      *
      * @return bool
      */
-    static function isExistsInputParam(String $name)
+    public static function isExistsInputParam(string $name) :bool
     {
         return isset($_POST[$name]);
     }
+
 }

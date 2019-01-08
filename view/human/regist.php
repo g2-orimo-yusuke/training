@@ -1,13 +1,14 @@
 <?php
+namespace view\human;
 ?><!DOCTYPE HTML>
-<html>
+<html lang="ja">
 <head>
     <meta charset="utf-8">
-    <title><?= $registViewName ?></title>
+    <title><?= $bean->getViewName() ?? '' ?></title>
 </head>
 <body>
-<div><?= $message ?></div>
-<p><?= $registViewName ?></p>
+<div><?= $bean->getMessage()['message'] ?? '' ?></div>
+<p><?= $bean->getViewName() ?></p>
 <form method="POST">
     <div>
         <input type="text" name="name" placeholder="名前" maxlength="15" required/>
@@ -18,10 +19,8 @@
     <div>
         <input type="email" name="email" placeholder="メールアドレス" maxlength="255" required/>
     </div>
-    <div>
-        <input type="submit" name="regist" value="登録"/>
-    </div>
+    <input type="submit" name="regist" value="登録"/>
 </form>
-<a href="<?= '/controller/human/table.php' ?>"><?= $tableViewName ?></a>
+<a href="<?= '/public/index.php?c=human/table' ?>"><?= $bean->getNextViewName()['nextViewName'] ?? '' ?></a>
 </body>
 </html>

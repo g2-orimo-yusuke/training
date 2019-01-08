@@ -1,46 +1,20 @@
 <?php
 
-namespace classes;
+namespace classes\db;
 
-use config\Base;
+use classes\cache\InMemoryDB;
+use classes\exception\appException;
 use Exception;
 use mysqli;
 
 /**
- * DB操作に関する処理を記述するクラス
+ * human機能のDB操作に関する処理を記述するクラス
+ *
+ * Class human
+ * @package classes\db
  */
-class db
+class Human extends Base
 {
-    /**
-     * 渡された要素名を基にDB接続のための情報を返却する。
-     *
-     * @param  String  要素名
-     *
-     * @return String  DB接続情報
-     */
-    public static function getInfo($infoElements)
-    {
-        return Base::$arrDb[$infoElements] ?? null;
-    }
-
-    /**
-     * @return mysqli DB接続オブジェクト
-     */
-    function dbConnect()
-    {
-        $host = db::getInfo('dbHost');
-        $username = db::getInfo('dbUsername');
-        $password = db::getInfo('dbPassword');
-        $dbname = db::getInfo('dbName');
-
-        $mysqli = new mysqli($host, $username, $password, $dbname);
-        if ($mysqli->connect_error) {
-            error_log($mysqli->connect_error);
-            exit;
-        }
-        return $mysqli;
-    }
-
     /**
      * 人一覧情報をDBから取得し返却する。
      *
@@ -48,7 +22,7 @@ class db
      *
      * @return bool|\mysqli_result
      */
-    function getHumanTable(mysqli $mysqli)
+    public function getTable(mysqli $mysqli)
     {
         $query = 'SELECT id, name, age, email FROM human ORDER BY id ASC';
         return $mysqli->query($query);
@@ -64,7 +38,7 @@ class db
      *
      * @throws Exception
      */
-    function registerHuman(mysqli $mysqli, string $name, int $age, string $email)
+    public function register(mysqli $mysqli, string $name, int $age, string $email): void
     {
         $query = 'INSERT INTO human (name, age, email) VALUES (?, ?, ?)';
         try {
@@ -74,7 +48,7 @@ class db
             $stmt->close();
 
         } catch (Exception $e) {
-            throw $e;
+            throw new appException('dbError');
         }
     }
 
@@ -87,7 +61,7 @@ class db
      * @return array
      * @throws Exception
      */
-    function getHumanInfo(mysqli $mysqli, int $id)
+    public function getInfoById(mysqli $mysqli, int $id): array
     {
         $query = 'SELECT id, name, age, email FROM human WHERE id=?';
         try {
@@ -102,12 +76,12 @@ class db
 
             return $result;
         } catch (Exception $e) {
-            throw $e;
+            throw new appException('dbError');
         }
     }
 
     /**
-     * DBの人情報を引き数の情報で更新する。
+     * DBの人情報を引数の情報で更新する。
      *
      * @param mysqli $mysqli
      * @param int    $id
@@ -115,11 +89,11 @@ class db
      * @param int    $age
      * @param string $email
      *
+     * @throws appException
      * @throws Exception
      */
-    function changeHuman(mysqli $mysqli, int $id, string $name, int $age, string $email)
+    public function change(mysqli $mysqli, int $id, string $name, int $age, string $email): void
     {
-
         $query = 'UPDATE human SET name=?, age=?, email=? WHERE id=?';
         try {
             $stmt = $mysqli->prepare($query);
@@ -127,8 +101,11 @@ class db
             $stmt->execute();
             $stmt->close();
 
+            $cache = new InMemoryDB();
+            $cache->zIncrBy('changeCount', 1, $id);
+
         } catch (Exception $e) {
-            throw $e;
+            throw new appException('dbError');
         }
     }
 
@@ -140,7 +117,7 @@ class db
      *
      * @throws Exception
      */
-    function deleteHuman(mysqli $mysqli, int $id)
+    public function delete(mysqli $mysqli, int $id): void
     {
         $query = 'DELETE FROM human WHERE id=?';
         try {
@@ -149,8 +126,12 @@ class db
             $stmt->execute();
             $stmt->close();
 
+            $cache = new InMemoryDB();
+            $cache->zDelete('changeCount', $id);
+
         } catch (Exception $e) {
-            throw $e;
+            throw new appException('dbError');
         }
     }
+
 }

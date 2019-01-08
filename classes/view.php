@@ -2,21 +2,23 @@
 
 namespace classes;
 
+use classes\beans\ViewOutput;
+use classes\cache\InMemoryDB;
 use mysqli_result;
 
 /**
- * ViewのPHPファイルを読み込み出力するためのクラス
+ * Viewの出力処理を記述するクラス
  */
-class view
+class View
 {
     /**
      * 渡されたBeanの情報を基にviewをechoで出力できる状態に成形する。
      *
-     * @param viewOutput $bean
+     * @param ViewOutput $bean
      *
      * @return false|string
      */
-    public function outPutView(viewOutput $bean)
+    public function outPutView(ViewOutput $bean): string
     {
         ob_start();
         include(ROOT_PATH . $bean->getViewPath());
@@ -31,7 +33,7 @@ class view
      *
      * @param array $arrColumn
      */
-    public function printTableHeader(array $arrColumn)
+    public function printTableHeader(array $arrColumn): void
     {
         foreach ($arrColumn as $v) {
             echo '<th>' . $v . '</th>';
@@ -45,7 +47,7 @@ class view
      * @param mysqli_result $result
      * @param array         $arrColumn
      */
-    public function printHumanTable(mysqli_result $result, array $arrColumn)
+    public function printHumanTable(mysqli_result $result, array $arrColumn) :void
     {
         for ($i = 0; $i < $result->num_rows; $i++) {
             $row = $result->fetch_assoc();
@@ -53,13 +55,34 @@ class view
             foreach ($arrColumn as $k => $val) {
                 // key名が'id'の場合のみ人編集画面へのリンクを付与する。
                 if ($k == 'id') {
-                    echo '<td><a href="/controller/human/edit.php?id=' . $row[$k] . '">' . $row[$k] . '</a></td>';
+                    echo '<td><a href="/public/index.php?c=human/edit&id=' . $row[$k] . ' ">' . $row[$k] . '</a></td>';
                 } else {
                     echo '<td>' . $row[$k] . '</td>';
                 }
             }
             echo '</tr>';
-
         }
     }
+
+    /**
+     * 順位付きのランキングを一覧として画面に出力する。
+     * ___________________
+     * ||順位|key名|value||
+     * ………………………………………………
+     * ………………………………………………
+     *
+     * @param string $cacheKey
+     * @param array  $array
+     */
+    public function printRankingTable(string $cacheKey, array $array) {
+
+        $cache = new InMemoryDB();
+
+        foreach ($array as $key => $val) {
+            echo '<tr><td>' . $cache->getRank($cacheKey, $val) . '</td><td>'
+                . $key .'</td><td>'
+                . $val . '</td></tr>';
+        }
+    }
+
 }

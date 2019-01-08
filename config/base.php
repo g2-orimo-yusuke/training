@@ -2,12 +2,6 @@
 
 namespace config;
 
-// mysqliの例外をスローさせるための記述
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-// プロジェクトのルートディレクトリのパス
-define('ROOT_DIR_PATH', '/Applications/MAMP/htdocs/');
-
 /**
  * システムのベースとなる情報を記述するクラス。
  *
@@ -16,14 +10,17 @@ define('ROOT_DIR_PATH', '/Applications/MAMP/htdocs/');
  */
 class Base
 {
-
     // DBアクセス情報
     static $arrDb = [
-        'dbHost' => 'localhost',
+        'dbHost'     => 'localhost',
         'dbUsername' => 'root',
         'dbPassword' => 'password',
-        'dbName' => 'testdb',
+        'dbName'     => 'testdb',
     ];
 
+    // hostURL
+    static $hostUrl = [
+        'localhost' => 'http://localhost:8888/',
+    ];
 
 }

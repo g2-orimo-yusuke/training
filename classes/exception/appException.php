@@ -2,29 +2,44 @@
 
 namespace classes\exception;
 
-use classes\config;
+use classes\Config;
+use Exception;
 
 /**
- * DB処理時の例外クラス
+ * アプリ例外クラス
  *
- * Class dbException
+ * Class appException
  * @package classes\exception
  */
-class dbException extends base
+class appException extends base
 {
+    protected $message;
+
     /**
-     * DB処理例外時の処理
+     * アプリ例外時の処理
      *
-     * dbException constructor.
-     * @throws \Exception
+     * appException constructor.
+     *
+     * @param string $messageElements
+     *
+     * @throws Exception
      */
-    public function __construct()
+    public function __construct($messageElements)
     {
         parent::__construct();
+        $this->message = Config::getExceptionMessage($messageElements);
+    }
 
+    /**
+     * Exceptionログを出力する。
+     *
+     * @throws Exception
+     */
+    public function putLog() :void
+    {
         try {
-            $this->createLog(config::getExceptionMessage('dbError'));
-        } catch (\Exception $e) {
+            $this->createLog($this->message);
+        } catch (Exception $e) {
             throw $e;
         }
     }
