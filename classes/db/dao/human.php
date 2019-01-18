@@ -127,7 +127,7 @@ class Human extends Base
             $stmt->close();
 
             $cache = new InMemoryDB();
-            $cache->zDelete('changeCount', $id);
+            $cache->zRem('changeCount', $id);
 
         } catch (Exception $e) {
             throw new appException('dbError');
