@@ -2,14 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: orimo.yusuke
- * Date: 2019-01-17
+ * Date: 2019-01-18
  * Time: 15:29
  */
 
-namespace classes\db\dao;
+namespace classes\db\daoMock;
 
 
-interface ihuman
+class base
 {
 
 }
