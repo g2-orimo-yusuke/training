@@ -3,6 +3,9 @@
 namespace model\human;
 
 use classes\Config;
+use classes\db\dao\Base;
+use classes\db\dao\Human;
+use classes\db\daoFactory\DaoFactory;
 use classes\exception\appException;
 use classes\Param;
 use classes\beans\ViewOutput;
@@ -23,9 +26,9 @@ class Regist
     public function regist(): void
     {
         try {
-            $db = new \classes\db\Human();
-            $mysqli = $db->dbConnect();
-            $db->register($mysqli, Param::getParam('name'), Param::getParam('age'), Param::getParam('email'));
+            $daoFactory = DaoFactory::getInstance();
+            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'vertical0', 'shard0', 'horizon0');
+            $dao->register(Param::getParam('name'), Param::getParam('age'), Param::getParam('email'));
 
             Param::setViewMessage(Config::getMessage('regist'));
         } catch (appException $e) {

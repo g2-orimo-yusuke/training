@@ -1,15 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orimo.yusuke
- * Date: 2019-01-22
- * Time: 19:26
- */
 
 namespace model\sample;
 
 
-class test
+abstract class Car
 {
-
+    protected static $price = 1;
+    public static function getFormattedPrice()
+    {
+        // self::$price と書くとgetFormattedPrice()の戻り値は1固定になってしまう。
+        return number_format(static::$price);
+    }
 }

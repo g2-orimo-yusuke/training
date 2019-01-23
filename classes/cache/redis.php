@@ -3,6 +3,7 @@
 namespace classes\cache;
 
 use classes\Config;
+use config\Cache;
 
 /**
  * Redisを使ったcache操作クラス
@@ -10,14 +11,16 @@ use classes\Config;
  * Class redis
  * @package classes\cache
  */
-class Redis
+class Redis implements IKvs
 {
     private $redis;
 
     public function __construct()
     {
         $this->redis = new \Redis();
-        $this->redis->connect(Config::getCacheConnectInfo('host'), Config::getCacheConnectInfo('port'));
+        $this->redis->connect(
+            Config::getCacheConnectInfo(Cache::CACHE_NAME_REDIS,'host'),
+            Config::getCacheConnectInfo(Cache::CACHE_NAME_REDIS, 'port'));
     }
 
     /**
@@ -105,9 +108,9 @@ class Redis
      * @param string $key
      * @param string $member
      */
-    public function zDelete(string $key, string $member)
+    public function zRem(string $key, string $member)
     {
-        $this->redis->zDelete($key, $member);
+        $this->redis->zRem($key, $member);
     }
 
     /**
@@ -128,7 +131,7 @@ class Redis
      * keyに対応するvalue配列を返却する。
      * start 〜 end で取得する要素の範囲を指定。
      * withscoresにtrueを指定するとスコアも返却する。
-     * ソート順はランクの降順。
+     * ソート順はスコアの降順。
      *
      * @param string    $key
      * @param int       $start

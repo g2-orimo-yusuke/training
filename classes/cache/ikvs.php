@@ -8,7 +8,7 @@ namespace classes\cache;
  * Interface kvsInterface
  * @package classes\cache
  */
-interface Kvs
+interface IKvs
 {
     /**
      * cacheにkeyとvalueの組み合わせで格納する。

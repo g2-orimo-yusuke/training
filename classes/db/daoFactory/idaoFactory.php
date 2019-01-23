@@ -1,6 +1,6 @@
 <?php
 
-namespace classes\db;
+namespace classes\db\daoFactory;
 
 /**
  * DAOを生成するクラスのインターフェース
@@ -11,9 +11,16 @@ namespace classes\db;
 interface IDaoFactory
 {
     /**
-     * humanのDAOインスタンスを生成し、返却する。
+     * 渡されたクラス名に対応するDAOインスタンスを生成し、返却する。
+     *
+     * @param $daoClassName
+     *
+     * @param $subordinationId
+     * @param $verticalId
+     * @param $shardId
+     * @param $horizonId
      *
      * @return mixed
      */
-    public function createHumanDao();
+    public function createDaoInstance($daoClassName, $subordinationId, $verticalId, $shardId, $horizonId);
 }

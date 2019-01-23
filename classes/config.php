@@ -27,6 +27,16 @@ class Config
     }
 
     /**
+     * Mockを使用するDAO名を配列で取得する。
+     *
+     * @return array
+     */
+    public static function getMockArr()
+    {
+        return Base::$arrMock;
+    }
+
+    /**
      * 渡された機能名・要素名に対応する画面名を返却する。
      * 渡された機能名・要素名に対応する画面名が存在しない場合はnullを返却する。
      *
@@ -82,12 +92,25 @@ class Config
      * 渡された要素名に対応するインメモリDBの接続情報を返却する。
      * 渡された要素名に対応するインメモリDBの接続情報が存在しない場合はnullを返却する。
      *
+     * @param string $kvsName
      * @param string $infoElements
      *
      * @return string|null
      */
-    public static function getCacheConnectInfo(string $infoElements) {
-        return Cache::$arrConnectInfo[Cache::USE_CACHE][$infoElements] ?? null;
+    public static function getCacheConnectInfo(string $kvsName, string $infoElements) {
+        return Cache::$arrConnectInfo[$kvsName][$infoElements] ?? null;
+    }
+
+    /**
+     * キャッシュからデータ取得する際のサイズの限界値を取得
+     *
+     * @param string $limitElements
+     *
+     * @return mixed
+     */
+    public static function getLimitBycache(string $limitElements)
+    {
+        return Cache::$getLimit[$limitElements];
     }
 
 }

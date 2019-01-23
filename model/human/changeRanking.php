@@ -9,12 +9,18 @@ use classes\Config;
 
 class ChangeRanking
 {
-    public function createViewBean() {
+    /**
+     * 画面表示用のBeanを生成する。
+     *
+     * @return ViewOutput
+     */
+    public function createViewBean(): ViewOutput
+    {
         $bean = new ViewOutput();
         $bean->setViewName(Config::getViewName('human', 'changeRanking'));
 
         $nextViewNameArray = [
-            'nextViewName' => Config::getViewName('human', 'table')
+            'nextViewName' => Config::getViewName('human', 'table'),
         ];
         $bean->setNextViewName($nextViewNameArray);
 
@@ -24,8 +30,9 @@ class ChangeRanking
         $bean->setViewPath('view/human/changeRanking.php');
 
         $cache = new InMemoryDB();
-        $bean->setResult($cache->zRevRange('changeCount', 0, -1, true));
+        $bean->setResult($cache->createRankingArr('changeCount', config::getLimitBycache('changeCount')));
 
         return $bean;
     }
+
 }

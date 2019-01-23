@@ -17,7 +17,7 @@ class Param
      *
      * @return string
      */
-    public static function getViewMessage() :string
+    public static function getViewMessage(): string
     {
         $cache = new InMemoryDB();
 
@@ -37,7 +37,7 @@ class Param
      *
      * @param String $message
      */
-    public static function setViewMessage(string $message) :void
+    public static function setViewMessage(string $message): void
     {
         $cache = new InMemoryDB();
         $cache->add('message', $message);
@@ -51,7 +51,7 @@ class Param
      *
      * @return string
      */
-    public static function getParam(string $name) :string
+    public static function getParam(string $name): string
     {
         if (isset($_POST[$name])) {
             return $_POST[$name];
@@ -69,7 +69,7 @@ class Param
      *
      * @return bool
      */
-    public static function isExistsInputParam(string $name) :bool
+    public static function isExistsInputParam(string $name): bool
     {
         return isset($_POST[$name]);
     }

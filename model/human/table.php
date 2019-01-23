@@ -3,6 +3,8 @@
 namespace model\human;
 
 use classes\Config;
+use classes\db\dao\Human;
+use classes\db\daoFactory\DaoFactory;
 use classes\exception\appException;
 use classes\Param;
 use classes\beans\ViewOutput;
@@ -25,9 +27,9 @@ class Table
     public function getInfo()
     {
         try {
-            $db = new \classes\db\Human();
-            $mysqli = $db->dbConnect();
-            $result = $db->getTable($mysqli);
+            $daoFactory = DaoFactory::getInstance();
+            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'vertical0', 'shard0', 'horizon0');
+            $result = $dao->getTable();
             return $result;
         } catch (appException $e) {
             Param::setViewMessage(Config::getMessage('error'));
@@ -38,18 +40,18 @@ class Table
     /**
      * 画面表示用のBeanを生成する。
      *
-     * @param \mysqli_result $result
+     * @param array $result
      *
      * @return ViewOutput
      */
-    public function createViewBean(\mysqli_result $result): ViewOutput
+    public function createViewBean(array $result): ViewOutput
     {
         $bean = new ViewOutput();
         $bean->setViewName(Config::getViewName('human', 'table'));
 
         $nextViewNameArray = [
             'nextViewName1' => Config::getViewName('human', 'regist'),
-            'nextViewName2' => Config::getViewName('human', 'changeRanking')
+            'nextViewName2' => Config::getViewName('human', 'changeRanking'),
         ];
         $bean->setNextViewName($nextViewNameArray);
 

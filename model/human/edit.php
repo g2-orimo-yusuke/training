@@ -3,7 +3,8 @@
 namespace model\human;
 
 use classes\Config;
-use classes\db\Human;
+use classes\db\dao\Human;
+use classes\db\daoFactory\DaoFactory;
 use classes\exception\appException;
 use classes\Param;
 use classes\beans\ViewOutput;
@@ -27,9 +28,10 @@ class Edit
     public function getInfo(): array
     {
         try {
-            $db = new Human();
-            $mysqli = $db->dbConnect();
-            return $db->getInfoById($mysqli, Param::getParam('id'));
+            $daoFactory = DaoFactory::getInstance();
+            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'vertical0', 'shard0', 'horizon0');
+
+            return $dao->getInfoById(Param::getParam('id'));
         } catch (appException $e) {
             Param::setViewMessage(Config::getMessage('error'));
             throw $e;
@@ -46,11 +48,10 @@ class Edit
     public function change(int $id): void
     {
         try {
-            $db = new Human();
-            $mysqli = $db->dbConnect();
-            $db->change($mysqli, $id, Param::getParam('name'), Param::getParam('age'),
+            $daoFactory = DaoFactory::getInstance();
+            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'vertical0', 'shard0', 'horizon0');
+            $dao->change($id, Param::getParam('name'), Param::getParam('age'),
                 Param::getParam('email'));
-
 
             Param::setViewMessage(sprintf(Config::getMessage('change'), $id));
 
@@ -71,10 +72,9 @@ class Edit
     public function delete(int $id): void
     {
         try {
-            $db = new Human();
-            $mysqli = $db->dbConnect();
-            $db->delete($mysqli, $id);
-
+            $daoFactory = DaoFactory::getInstance();
+            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'vertical0', 'shard0', 'horizon0');
+            $dao->delete($id);
             Param::setViewMessage(sprintf(Config::getMessage('delete'), $id));
 
         } catch (Exception $e) {

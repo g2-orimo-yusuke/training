@@ -4,14 +4,15 @@ namespace controller\human;
 
 use classes\exception\appException;
 use classes\View;
+use controller\base;
 
 /**
  * 人情報一覧機能のControllerクラス
  *
- * Class
+ * Class Table
  * @package controller\human
  */
-class Table
+class Table extends base
 {
     /**
      * 処理実行
@@ -24,11 +25,6 @@ class Table
         // DBから人一覧に表示する情報を取得
         try {
             $result = $tableModel->getInfo();
-
-//            $cache = new InMemoryDB();
-//            if (!$cache->exists('changeCount')) {
-//                $cache->createChangeRanking($result);
-//            }
 
             $bean = $tableModel->createViewBean($result);
             $viewOutPut = new View();

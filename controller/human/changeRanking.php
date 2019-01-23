@@ -3,8 +3,15 @@
 namespace controller\human;
 
 use classes\View;
+use controller\base;
 
-class ChangeRanking
+/**
+ * 変更回数ランキング機能のControllerクラス
+ *
+ * Class ChangeRanking
+ * @package controller\human
+ */
+class ChangeRanking extends base
 {
     public function action()
     {

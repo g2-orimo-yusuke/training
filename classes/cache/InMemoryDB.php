@@ -98,9 +98,9 @@ class InMemoryDB
      * @param string $key
      * @param string $member
      */
-    public function zDelete(string $key, string $member)
+    public function zRem(string $key, string $member)
     {
-        $this->instance->zDelete($key, $member);
+        $this->instance->zRem($key, $member);
     }
 
     /**
@@ -109,10 +109,12 @@ class InMemoryDB
      * @param string $key
      * @param        $min
      * @param        $max
+     *
+     * @return int
      */
-    public function zcount(string $key, $min, $max)
+    public function zCount(string $key, $min, $max)
     {
-        $this->instance->zCount($key, $min, $max);
+        return $this->instance->zCount($key, $min, $max);
     }
 
     /**
@@ -124,7 +126,7 @@ class InMemoryDB
      * @param int       $end
      * @param bool|null $withscores
      *
-     * @return string
+     * @return array
      */
     public function zRevRange(string $key, int $start, int $end, bool $withscores = null)
     {
@@ -141,24 +143,29 @@ class InMemoryDB
      */
     public function getRank(string $key, string $score)
     {
-        $rank = $this->instance->zCount($key, ++$score, '+inf');
+        $rank = $this->zCount($key, ++$score, '+inf');
         return ++$rank;
     }
 
-//    /**
-//     * 変更回数ランキングの基となるデータをcacheに登録する。
-//     * member: id
-//     * score: 0（初期値）
-//     *
-//     * @param mysqli_result $result
-//     */
-//    public function createChangeRanking(mysqli_result $result)
-//    {
-//        for ($i = 0; $i < $result->num_rows; $i++) {
-//            $row = $result->fetch_assoc();
-//            $this->instance->zAdd('changeCount', 0, $row['id']);
-//        }
-//        $result->data_seek(0);
-//    }
+    /**
+     * 渡されたkeyのランキングデータをcacheから取得し、取得データに順位を付与して返却する。
+     * 返却配列: [[0]=>{順位, value, score}, [1]=>{順位, value, score}, ……]
+     *
+     * @param string $cacheKey
+     * @param string $getLimit
+     *
+     * @return array
+     */
+    public function createRankingArr(string $cacheKey, string $getLimit)
+    {
+        $rankArr = [];
+
+        $result = $this->zRevRange($cacheKey, 0, $getLimit, true);
+        foreach ($result as $value => $score) {
+            $rankArr[] = [$this->getRank($cacheKey, $score), $value, $score];
+        }
+
+        return $rankArr;
+    }
 
 }

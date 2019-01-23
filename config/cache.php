@@ -14,7 +14,7 @@ class Cache
     public const CACHE_NAME_MEMCACHED = 'memcached';
 
     // cacheとして使用するインメモリDB名を記述
-    public const USE_CACHE = self::CACHE_NAME_REDIS;
+    public const USE_CACHE = self::CACHE_NAME_MEMCACHED;
 
     // インメモリDBのアクセス情報
     public static $arrConnectInfo = [
@@ -27,6 +27,11 @@ class Cache
             'host' => LOCAL_HOST,
             'port' => 11211,
         ],
+    ];
+
+    // キャッシュからデータ取得する際のサイズの限界値
+    public static $getLimit = [
+        'changeCount' => 1000
     ];
 
 }

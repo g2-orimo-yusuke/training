@@ -1,18 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orimo.yusuke
- * Date: 2019-01-22
- * Time: 19:00
- */
 
-namespace controller;
+namespace controller\sample;
 
 
-class test extends base
+use model\sample\NissanNote;
+
+class test
 {
     public function action()
     {
-        echo 'test';
+        echo NissanNote::getFormattedPrice();
+
     }
 }

@@ -1,35 +1,44 @@
 <?php
 
-namespace classes\db\dao;
+namespace classes\db\daoMock;
 
 
-use mysqli;
+use classes\db\daoIf\ihuman;
 
-class HumanMock implements ihuman
+class Human implements ihuman
 {
-    public function getTable(mysqli $mysqli): \mysqli_result
+    public function __construct($dbObject)
     {
-        // TODO: Implement getTable() method.
+        // 何もしない
     }
 
-    public function register(mysqli $mysqli, string $name, int $age, string $email): void
+    public function getTable(): array
     {
-        // TODO: Implement register() method.
+        return [
+            0 => ['id' => '1', 'name' => 'mockName', 'age' => '20', 'email' => 'aa@aaa'],
+            1 => ['id' => '2', 'name' => 'mockmock', 'age' => '30', 'email' => 'ccc@dafeaa'],
+            2 => ['id' => '3', 'name' => 'mockdata', 'age' => '44', 'email' => '2222222222333@affefeafeafa'],
+        ];
     }
 
-    public function getInfoById(mysqli $mysqli, int $id): array
+    public function register(string $name, int $age, string $email): void
     {
-        // TODO: Implement getInfoById() method.
+        // 何もしない
     }
 
-    public function change(mysqli $mysqli, int $id, string $name, int $age, string $email): void
+    public function getInfoById(int $id): array
     {
-        // TODO: Implement change() method.
+        return ['id' => '1', 'name' => 'mockName', 'age' => '20', 'email' => 'aa@aaa'];
     }
 
-    public function delete(mysqli $mysqli, int $id): void
+    public function change(int $id, string $name, int $age, string $email): void
     {
-        // TODO: Implement delete() method.
+        // 何もしない
+    }
+
+    public function delete(int $id): void
+    {
+        // 何もしない
     }
 
 }

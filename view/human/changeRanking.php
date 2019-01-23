@@ -14,7 +14,7 @@ namespace view\human;
         <tr>
             <?php $this->printTableHeader($bean->getOutputArray()['arrColumn']) ?>
         </tr>
-            <?php $this->printRankingTable('changeCount', $bean->getResult()) ?>
+            <?php $this->printTableByArr($bean->getResult()) ?>
     </table>
 </form>
 <a href='/public/index.php?c=human/table'><?= $bean->getNextViewName()['nextViewName'] ?? '' ?></a>

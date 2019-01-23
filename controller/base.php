@@ -1,15 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orimo.yusuke
- * Date: 2019-01-16
- * Time: 18:23
- */
 
 namespace controller;
 
-
-class base
+/**
+ * Controllerのベースクラス。
+ *
+ * Class base
+ * @package controller
+ */
+abstract class base
 {
-
+    /**
+     * controllerの実行処理
+     *
+     * @return mixed
+     */
+    abstract function action();
 }

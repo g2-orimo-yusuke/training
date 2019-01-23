@@ -3,6 +3,7 @@
 namespace classes\cache;
 
 use classes\Config;
+use config\Cache;
 
 /**
  * Memcachedを使ったcache操作クラス
@@ -10,14 +11,17 @@ use classes\Config;
  * Class memcached
  * @package classes\cache
  */
-class Memcached
+class Memcached implements IKvs
 {
     private $memcached;
+    private $redis;
 
     public function __construct()
     {
         $this->memcached = new \Memcached();
-        $this->memcached->addServer(Config::getCacheConnectInfo('host'), Config::getCacheConnectInfo('port'));
+        $this->memcached->addServer(
+            Config::getCacheConnectInfo(Cache::CACHE_NAME_MEMCACHED, 'host')
+            ,Config::getCacheConnectInfo(Cache::CACHE_NAME_MEMCACHED, 'port'));
     }
 
     /**
@@ -79,27 +83,83 @@ class Memcached
         }
     }
 
+    /**
+     * 渡されたkey・memberのスコアにscoreを加算する。
+     *
+     * @param string $key
+     * @param float  $score
+     * @param string $value
+     */
     public function zAdd(string $key, float $score, string $value)
     {
-
+        $this->createRedisInstance();
+        $this->redis->zAdd($key, $score, $value);
     }
 
-    public function zIncrBy(string $key, float $score, string $member) {
-
-    }
-
-    public function zDelete(string $key, string $member)
+    /**
+     * 渡されたkey・memberのスコアにscoreを加算する。
+     *
+     * @param string $key
+     * @param float  $score
+     * @param string $member
+     */
+    public function zIncrBy(string $key, float $score, string $member)
     {
-
+        $this->createRedisInstance();
+        $this->redis->zIncrBy($key, $score, $member);
     }
 
+    /**
+     * 渡されたkey・memberを削除する。
+     *
+     * @param string $key
+     * @param string $member
+     */
+    public function zRem(string $key, string $member)
+    {
+        $this->createRedisInstance();
+        $this->redis->zRem($key, $member);
+    }
+
+    /**
+     * 渡されたkeyで格納されているメンバの内、min〜maxに該当するスコアを持つメンバ数を返却する。
+     *
+     * @param string $key
+     * @param        $min
+     * @param        $max
+     *
+     * @return mixed
+     */
     public function zCount(string $key, $min, $max)
     {
-        return 0;
+        $this->createRedisInstance();
+        return $this->redis->zCount($key, $min, $max);
     }
 
-    public function zRevRange(string $key, string $start, string $end ,bool $withscores = null)
+    /**
+     * keyに対応するvalue配列を返却する。
+     * ソート順はランクの降順
+     *
+     * @param string    $key
+     * @param string    $start
+     * @param string    $end
+     * @param bool|null $withscores
+     *
+     * @return mixed
+     */
+    public function zRevRange(string $key, string $start, string $end, bool $withscores = null)
     {
-        return '';
+        $this->createRedisInstance();
+        return $this->redis->zRevRange($key, $start, $end, $withscores);
+    }
+
+    /**
+     * redisのインスタンスを生成する。
+     */
+    private function createRedisInstance()
+    {
+        if (!isset($this->redis)) {
+            $this->redis = new Redis();
+        }
     }
 }

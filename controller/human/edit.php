@@ -6,6 +6,7 @@ use classes\exception\appException;
 use classes\Param;
 use classes\View;
 use classes\Config;
+use controller\base;
 use Exception;
 
 /**
@@ -14,7 +15,7 @@ use Exception;
  * Class edit
  * @package controller\human
  */
-class Edit
+class Edit extends base
 {
     /**
      * 処理実行

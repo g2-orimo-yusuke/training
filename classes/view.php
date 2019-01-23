@@ -3,7 +3,6 @@
 namespace classes;
 
 use classes\beans\ViewOutput;
-use classes\cache\InMemoryDB;
 use mysqli_result;
 
 /**
@@ -44,44 +43,53 @@ class View
      * DBの取得結果と連想配列を基に一覧を画面に出力する。
      * DBの取得結果のカラム名と連想配列の要素名は一致している必要がある。
      *
-     * @param mysqli_result $result
-     * @param array         $arrColumn
+     * @param array $result
+     * @param array $arrColumn
      */
-    public function printHumanTable(mysqli_result $result, array $arrColumn) :void
+    public function printHumanTable(array $result, array $arrColumn): void
     {
-        for ($i = 0; $i < $result->num_rows; $i++) {
-            $row = $result->fetch_assoc();
+
+        foreach ($result as $row) {
             echo '<tr>';
-            foreach ($arrColumn as $k => $val) {
-                // key名が'id'の場合のみ人編集画面へのリンクを付与する。
-                if ($k == 'id') {
-                    echo '<td><a href="/public/index.php?c=human/edit&id=' . $row[$k] . ' ">' . $row[$k] . '</a></td>';
-                } else {
-                    echo '<td>' . $row[$k] . '</td>';
-                }
+            $iterator = new ViewTableIterator($arrColumn, $row);
+            foreach ($iterator as $k) {
+
             }
             echo '</tr>';
         }
     }
 
     /**
-     * 順位付きのランキングを一覧として画面に出力する。
-     * ___________________
-     * ||順位|key名|value||
-     * ………………………………………………
-     * ………………………………………………
+     * テーブルのカラム部分を画面に出力する。
+     * colNameがidの場合のみidのリンクを付与する
      *
-     * @param string $cacheKey
-     * @param array  $array
+     * @param string $colName
+     * @param string $param
+     * @param string $link
      */
-    public function printRankingTable(string $cacheKey, array $array) {
+    private function printColumn(string $colName, string $param, string $link = '')
+    {
+        if ($colName == 'id') {
+            echo '<td><a href="' . $link . $param . ' ">' . $param . '</a></td>';
+        } else {
+            echo '<td>' . $param . '</td>';
+        }
+    }
 
-        $cache = new InMemoryDB();
-
-        foreach ($array as $key => $val) {
-            echo '<tr><td>' . $cache->getRank($cacheKey, $val) . '</td><td>'
-                . $key .'</td><td>'
-                . $val . '</td></tr>';
+    /**
+     * 配列を一覧として画面に出力する。
+     * 引数の形式 array: [[0]=>{要素1,要素2 ……}, [1]=>{要素1,要素2 ……} ……]
+     *
+     * @param array $array
+     */
+    public function printTableByArr(array $array): void
+    {
+        foreach ($array as $row) {
+            echo '<tr>';
+            foreach ($row as $val) {
+                echo '<td>' . $val . '</td>';
+            }
+            echo '</tr>';
         }
     }
 

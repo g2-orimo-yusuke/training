@@ -5,6 +5,7 @@ namespace controller\human;
 use classes\exception\appException;
 use classes\Param;
 use classes\View;
+use controller\base;
 use Exception;
 
 /**
@@ -13,7 +14,7 @@ use Exception;
  * Class regist
  * @package controller\human
  */
-class Regist
+class Regist extends base
 {
     /**
      * 処理実行

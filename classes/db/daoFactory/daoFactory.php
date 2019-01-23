@@ -1,53 +1,59 @@
 <?php
 
-namespace classes\db;
+namespace classes\db\daoFactory;
+
+use classes\Config;
+use classes\db\dao\Base;
+use classes\Singleton;
 
 /**
  * DAO生成クラス
  *
  * Class DaoFactory
+ * @property array mockList
  * @package classes\db
  */
 class DaoFactory implements IDaoFactory
 {
-    private static $instance;
+    use Singleton;
+
+    private static $instances = [];
+
+    private static $mockList;
 
     private function __construct()
     {
-
+        $this->mockList = Config::getMockArr();
     }
 
     /**
-     * 自分自身のインスタンスを生成し返却する。（Singleton）
+     * 渡されたクラス名に対応するDAOインスタンスを生成し、返却する。
+     * Mockを使用するように指定されているDAOはMockDAOのインスタンスを生成し、返却する。
+     * 一度生成したDAOインスタンスは保持し同一のインスタンスを要求された場合、保持しているインスタンスを返却する。
      *
-     * @return IDaoFactory
+     * @param $daoClassName
+     *
+     * @param $subordinationId
+     * @param $verticalId
+     * @param $shardId
+     * @param $horizonId
+     *
+     * @return mixed
      */
-    public static function getInstance()
+    public function createDaoInstance($daoClassName, $subordinationId, $verticalId, $shardId, $horizonId)
     {
-        if (!isset(self::$instance)){
-            self::$instance = new DaoFactory();
+        if (in_array($daoClassName, $this->mockList)) {
+            $daoClassName = str_replace('\\dao\\', '\\daoMock\\', $daoClassName);
         }
 
-        return self::$instance;
-    }
+        if (!isset(self::$instances[$daoClassName][$subordinationId][$verticalId][$shardId][$horizonId])) {
+//            echo '保持しているインスタンス';]
+            self::$instances[$daoClassName][$subordinationId][$verticalId][$shardId][$horizonId]
+                = new $daoClassName(new Base($subordinationId, $verticalId, $shardId, $horizonId));
+        }
 
-    /**
-     * このクラスのインスタンス複製を禁止する。
-     *
-     * @throws \Exception
-     */
-    public final function __clone() {
-        throw new \Exception();
-    }
-
-    /**
-     * humanのDAOインスタンスを生成し、返却する。
-     *
-     * @return Human
-     */
-    public function createHumanDao()
-    {
-        return new Human();
+//        echo '新しいインスタンス';
+        return self::$instances[$daoClassName][$subordinationId][$verticalId][$shardId][$horizonId];
     }
 
 }

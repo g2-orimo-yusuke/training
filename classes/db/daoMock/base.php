@@ -1,15 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orimo.yusuke
- * Date: 2019-01-18
- * Time: 15:29
- */
 
 namespace classes\db\daoMock;
 
-
-class base
+/**
+ * Mockの共通的な処理を記述するクラス
+ *
+ * Class base
+ * @package classes\db\daoMock
+ */
+class Base
 {
-
+    /**
+     * Mockのため何もしない
+     */
+    public function dbConnect()
+    {
+        return null;
+    }
 }
