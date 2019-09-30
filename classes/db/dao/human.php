@@ -43,7 +43,7 @@ class Human implements ihuman
     public function getTable(): array
     {
         try {
-            $query = 'SELECT id, name, age, email FROM human ORDER BY id ASC';
+            $query = 'SELECT id, name, age, email FROM human ORDER BY id ASC LIMIT 100';
 
             return self::$dbObject->query($query);
         } catch (Exception $e) {

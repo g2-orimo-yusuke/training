@@ -13,14 +13,12 @@ interface IDaoFactory
     /**
      * 渡されたクラス名に対応するDAOインスタンスを生成し、返却する。
      *
-     * @param $daoClassName
-     *
-     * @param $subordinationId
-     * @param $verticalId
-     * @param $shardId
-     * @param $horizonId
+     * @param string $daoName
+     * @param string $rwDiv
+     * @param string $splGroup
+     * @param string $shardId
      *
      * @return mixed
      */
-    public function createDaoInstance($daoClassName, $subordinationId, $verticalId, $shardId, $horizonId);
+    public function createDaoInstance(string $daoName, string $rwDiv, string $splGroup, string $shardId);
 }

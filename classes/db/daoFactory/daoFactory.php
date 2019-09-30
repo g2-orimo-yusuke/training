@@ -19,7 +19,7 @@ class DaoFactory implements IDaoFactory
 
     private static $instances = [];
 
-    private static $mockList;
+    private $mockList = [];
 
     private function __construct()
     {
@@ -31,29 +31,27 @@ class DaoFactory implements IDaoFactory
      * Mockを使用するように指定されているDAOはMockDAOのインスタンスを生成し、返却する。
      * 一度生成したDAOインスタンスは保持し同一のインスタンスを要求された場合、保持しているインスタンスを返却する。
      *
-     * @param $daoClassName
-     *
-     * @param $subordinationId
-     * @param $verticalId
-     * @param $shardId
-     * @param $horizonId
+     * @param string $daoName
+     * @param string $rwDiv
+     * @param string $splGroup
+     * @param string $shardId
      *
      * @return mixed
      */
-    public function createDaoInstance($daoClassName, $subordinationId, $verticalId, $shardId, $horizonId)
+    public function createDaoInstance(string $daoName, string $rwDiv, string $splGroup, string $shardId)
     {
-        if (in_array($daoClassName, $this->mockList)) {
-            $daoClassName = str_replace('\\dao\\', '\\daoMock\\', $daoClassName);
+        if (in_array($daoName, $this->mockList)) {
+            $daoName = str_replace('\\dao\\', '\\daoMock\\', $daoName);
         }
 
-        if (!isset(self::$instances[$daoClassName][$subordinationId][$verticalId][$shardId][$horizonId])) {
+        if (!isset(self::$instances[$daoName][$rwDiv][$splGroup][$shardId])) {
 //            echo '保持しているインスタンス';]
-            self::$instances[$daoClassName][$subordinationId][$verticalId][$shardId][$horizonId]
-                = new $daoClassName(new Base($subordinationId, $verticalId, $shardId, $horizonId));
+            self::$instances[$daoName][$rwDiv][$splGroup][$shardId]
+                = (new $daoName( new Base($rwDiv, $splGroup, $shardId)));
         }
 
 //        echo '新しいインスタンス';
-        return self::$instances[$daoClassName][$subordinationId][$verticalId][$shardId][$horizonId];
+        return self::$instances[$daoName][$rwDiv][$splGroup][$shardId];
     }
 
 }

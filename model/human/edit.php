@@ -29,7 +29,7 @@ class Edit
     {
         try {
             $daoFactory = DaoFactory::getInstance();
-            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'vertical0', 'shard0', 'horizon0');
+            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'users', 'shard0');
 
             return $dao->getInfoById(Param::getParam('id'));
         } catch (appException $e) {
@@ -49,7 +49,7 @@ class Edit
     {
         try {
             $daoFactory = DaoFactory::getInstance();
-            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'vertical0', 'shard0', 'horizon0');
+            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'users', 'shard0');
             $dao->change($id, Param::getParam('name'), Param::getParam('age'),
                 Param::getParam('email'));
 
@@ -73,7 +73,7 @@ class Edit
     {
         try {
             $daoFactory = DaoFactory::getInstance();
-            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'vertical0', 'shard0', 'horizon0');
+            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'users', 'shard0');
             $dao->delete($id);
             Param::setViewMessage(sprintf(Config::getMessage('delete'), $id));
 

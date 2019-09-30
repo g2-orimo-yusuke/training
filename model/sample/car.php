@@ -3,7 +3,7 @@
 namespace model\sample;
 
 
-abstract class Car
+class Car
 {
     protected static $price = 1;
     public static function getFormattedPrice()

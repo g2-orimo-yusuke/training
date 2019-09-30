@@ -28,7 +28,7 @@ class Table
     {
         try {
             $daoFactory = DaoFactory::getInstance();
-            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'vertical0', 'shard0', 'horizon0');
+            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'users', 'shard0');
             $result = $dao->getTable();
             return $result;
         } catch (appException $e) {

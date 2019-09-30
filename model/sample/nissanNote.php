@@ -5,5 +5,5 @@ namespace model\sample;
 
 class NissanNote extends Car
 {
-    protected static $price = 1400000;
+    protected static $price = 1323;
 }

@@ -18,41 +18,37 @@ class Base
     // DBアクセス情報
     static $arrDb = [
         'master' => [
-            'vertical0' => [
+            'users' => [
                 'shard0' => [
-                    'horizon0' => [
                         'dbHost'     => 'localhost',
                         'dbUsername' => 'root',
                         'dbPassword' => 'password',
                         'dbName'     => 'testdb',
-                    ],
-                    'horizon1' => [
-
-                    ],
                 ],
                 'shard1' => [
-
+                        'dbHost'     => 'localhost',
+                        'dbUsername' => 'root',
+                        'dbPassword' => 'password',
+                        'dbName'     => 'testdb',
                 ],
-            ],
-            'vertical1' => [
-
             ],
         ],
         'slave0' => [
-            'vertical0' => [
-
+            'users' => [
                 'shard0' => [
-
+                    'dbHost'     => 'localhost',
+                    'dbUsername' => 'root',
+                    'dbPassword' => 'password',
+                    'dbName'     => 'testdb',
                 ],
                 'shard1' => [
-
+                    'dbHost'     => 'localhost',
+                    'dbUsername' => 'root',
+                    'dbPassword' => 'password',
+                    'dbName'     => 'testdb',
                 ],
             ],
-            'vertical1' => [
-
-            ],
         ],
-
     ];
 
 

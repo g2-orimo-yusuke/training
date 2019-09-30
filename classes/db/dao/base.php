@@ -16,35 +16,33 @@ class Base
     private static $dbConnection;
     private static $prepareStmt;
 
-    private $subordinationId;
-    private $verticalId;
+    private $rwDiv;
+    private $splGroup;
     private $shardId;
-    private $horizonId;
 
 
-    public function __construct($subordinationId, $verticalId, $shardId, $horizonId)
+    public function __construct($rwDiv, $splGroup, $shardId)
     {
-        $this->subordinationId = $subordinationId;
-        $this->verticalId = $verticalId;
+        $this->rwDiv = $rwDiv;
+        $this->splGroup = $splGroup;
         $this->shardId = $shardId;
-        $this->horizonId = $horizonId;
     }
 
 
     /**
      * 渡された要素名を基にDB接続のための情報を返却する。
      *
-     * @param $subordinationId
-     * @param $verticalId
+     * @param $rwDiv
+     * @param $splGroup
      * @param $shardId
-     * @param $horizonId
+     * @param $
      * @param $infoElements
      *
      * @return string|null
      */
-    public static function getInfo($subordinationId, $verticalId, $shardId, $horizonId, $infoElements)
+    public static function getInfo(string $rwDiv, string $splGroup, string $shardId, string $infoElements)
     {
-        return \config\Base::$arrDb[$subordinationId][$verticalId][$shardId][$horizonId][$infoElements] ?? null;
+        return \config\Base::$arrDb[$rwDiv][$splGroup][$shardId][$infoElements] ?? null;
     }
 
     /**
@@ -54,10 +52,10 @@ class Base
      */
     public function dbConnect()
     {
-        $host = $this->getInfo($this->subordinationId, $this->verticalId, $this->shardId, $this->horizonId,'dbHost');
-        $username = $this->getInfo($this->subordinationId, $this->verticalId, $this->shardId, $this->horizonId,'dbUsername');
-        $password = $this->getInfo($this->subordinationId, $this->verticalId, $this->shardId, $this->horizonId,'dbPassword');
-        $dbName = $this->getInfo($this->subordinationId, $this->verticalId, $this->shardId, $this->horizonId,'dbName');
+        $host = $this->getInfo($this->rwDiv, $this->splGroup, $this->shardId, 'dbHost');
+        $username = $this->getInfo($this->rwDiv, $this->splGroup, $this->shardId, 'dbUsername');
+        $password = $this->getInfo($this->rwDiv, $this->splGroup, $this->shardId, 'dbPassword');
+        $dbName = $this->getInfo($this->rwDiv, $this->splGroup, $this->shardId, 'dbName');
 
         self::$dbConnection = new mysqli($host, $username, $password, $dbName);
         if (self::$dbConnection->connect_error) {

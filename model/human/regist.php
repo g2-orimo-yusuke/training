@@ -3,7 +3,6 @@
 namespace model\human;
 
 use classes\Config;
-use classes\db\dao\Base;
 use classes\db\dao\Human;
 use classes\db\daoFactory\DaoFactory;
 use classes\exception\appException;
@@ -25,10 +24,14 @@ class Regist
      */
     public function regist(): void
     {
+        set_time_limit ( 0);
         try {
             $daoFactory = DaoFactory::getInstance();
-            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'vertical0', 'shard0', 'horizon0');
-            $dao->register(Param::getParam('name'), Param::getParam('age'), Param::getParam('email'));
+            $dao = $daoFactory->createDaoInstance(Human::class, 'master', 'users', 'shard0');
+
+            for ($i = 10000000; $i < 12000000; $i++) {
+                $dao->register(Param::getParam('name'), Param::getParam('age'), Param::getParam('email'));
+            }
 
             Param::setViewMessage(Config::getMessage('regist'));
         } catch (appException $e) {
