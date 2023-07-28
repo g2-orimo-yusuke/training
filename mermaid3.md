@@ -8,6 +8,7 @@ sequenceDiagram
 
     autoscale->>autoscale: オートスケール停止
     github->>deploy: 圧縮モードでダウンロード
+    deploy->>deploy: 圧縮ソースを展開
     deploy->>db: DBマイグレーション
     deploy->>api: 圧縮ファイルを転送する
     api->>api: ファイルを展開する
